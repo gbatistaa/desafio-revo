@@ -1,20 +1,18 @@
+// src/controllers/ProductsController.ts
 import { Request, Response } from "express";
 import { NotFoundError } from "../errors/NotFoundError";
 import { CreateProductResquestDto } from "../interfaces/dtos/creatable-product-request.dto";
-import { UpdateProductResquestDto } from "../interfaces/dtos/updatable-product-request.dto";
 import Products from "../models/Prodcuts";
 import { handleControllerError } from "../utils/handleControllerError";
+import { createProductSchema, paramsSchema, updateProductSchema } from "../validator/product.validator";
+// Import the schemas
 
 class ProductsController {
   public static createProduct = async (req: CreateProductResquestDto, res: Response) => {
-    const { name, description, price } = req.body;
-
     try {
-      const newProduct = await Products.create({
-        name,
-        description,
-        price,
-      });
+      const validatedData = createProductSchema.parse(req.body);
+
+      const newProduct = await Products.create(validatedData);
 
       return res.status(201).json({
         message: `Product with id ${newProduct.dataValues.id} created with success!`,
@@ -39,9 +37,9 @@ class ProductsController {
   };
 
   public static getProductById = async (req: Request, res: Response) => {
-    const { id } = req.params;
-
     try {
+      const { id } = paramsSchema.parse(req.params);
+
       const product = await Products.findOne({ where: { id: id } });
 
       if (!product) {
@@ -55,9 +53,9 @@ class ProductsController {
   };
 
   public static deleteProductById = async (req: Request, res: Response) => {
-    const { id } = req.params;
-
     try {
+      const { id } = paramsSchema.parse(req.params);
+
       const deletedCount = await Products.destroy({ where: { id } });
 
       if (deletedCount === 0) {
@@ -70,13 +68,15 @@ class ProductsController {
     }
   };
 
-  public static updateProductById = async (req: UpdateProductResquestDto, res: Response) => {
-    const { id } = req.params;
-
-    // Not null updatable data props:
-    const updateData = Object.fromEntries(Object.entries(req.body).filter(([, value]) => value !== undefined));
-
+  public static updateProductById = async (req: Request, res: Response) => {
     try {
+      const { id } = paramsSchema.parse(req.params);
+      const updateData = updateProductSchema.parse(req.body);
+
+      if (Object.keys(updateData).length === 0) {
+        return res.status(400).json({ message: "No fields to update provided" });
+      }
+
       const [updatedCount] = await Products.update(updateData, { where: { id } });
 
       if (updatedCount === 0) {

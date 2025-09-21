@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import conn from "../database/database";
-import { ProductType } from "../interfaces/product.interface";
+import { ProductType } from "../interfaces/models/product.interface";
 
 const Products = conn.define<Model<ProductType>>(
   "Products",
@@ -8,6 +8,7 @@ const Products = conn.define<Model<ProductType>>(
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
     },
     name: {
       type: DataTypes.STRING,

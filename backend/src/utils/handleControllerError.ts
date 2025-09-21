@@ -1,5 +1,6 @@
 import { Response } from "express";
 import { BaseError, ForeignKeyConstraintError, UniqueConstraintError } from "sequelize";
+import { ZodError } from "zod";
 import { NotFoundError } from "../errors/NotFoundError";
 
 export function handleControllerError(error: unknown, res: Response) {
@@ -30,6 +31,13 @@ export function handleControllerError(error: unknown, res: Response) {
     return res.status(400).json({
       error: "Database Error",
       message: error.message,
+    });
+  }
+
+  if (error instanceof ZodError) {
+    return res.status(400).json({
+      error: error.message,
+      errors: error.issues,
     });
   }
 

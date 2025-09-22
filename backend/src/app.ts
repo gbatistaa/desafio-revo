@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use("/products-crud", productsCrud);
 
-const PORT = 3000;
+const PORT = 4000;
 app.listen(PORT, () => {
   console.log(`Backend running on port: ${PORT}`);
 });

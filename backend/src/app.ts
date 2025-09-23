@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import conn from "./database/database";
 import productsCrud from "./routes/products-crud.routes";
@@ -13,6 +14,16 @@ app.use(
 );
 
 app.use(express.json());
+
+app.use(
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      credentials: true,
+    }),
+  ),
+);
 
 app.use("/products-crud", productsCrud);
 

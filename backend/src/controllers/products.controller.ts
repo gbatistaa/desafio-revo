@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 // src/controllers/ProductsController.ts
 import { Request, Response } from "express";
 import { NotFoundError } from "../errors/NotFoundError";
@@ -46,7 +47,7 @@ class ProductsController {
         throw new NotFoundError(`Product with id ${id} not found`);
       }
 
-      return res.status(200).json({ message: "Product found with success!", product });
+      return res.status(200).json({ message: "Product found with success!", product: product.dataValues });
     } catch (error: unknown) {
       handleControllerError(error, res);
     }

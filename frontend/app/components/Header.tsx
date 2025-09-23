@@ -15,7 +15,7 @@ function Header(): React.JSX.Element {
         </div>
       </div>
       <button type="button" className="flex items-center justify-between bg-black text-white cursor-pointer h-10
-        gap-4 p-3 rounded-lg">
+        gap-4 p-3 rounded-lg hover:bg-neutral-700 ease-out duration-150">
         <FaPlus />
         <p className="text-nowrap text-normal font-semibold">Novo Produto</p>
       </button>

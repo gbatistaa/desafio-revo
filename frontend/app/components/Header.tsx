@@ -1,8 +1,17 @@
+import { useAtom } from "jotai";
 import React from "react";
 import { BsBoxSeam } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa6";
+import { isProductFormOnAtom } from "./ProductForm";
 
 function Header(): React.JSX.Element {
+  const [, setIsProductFormOn] = useAtom(isProductFormOnAtom);
+
+  const handleCreateProductButtonClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
+    event.preventDefault();
+    setIsProductFormOn(true);
+  }
+
   return (
     <header className="flex items-center justify-between h-16">
       <div className="flex items-center gap-4 h-full w-full">
@@ -14,8 +23,12 @@ function Header(): React.JSX.Element {
           <p className="text-gray-500">Gerencie seu catálogo de produtos</p>
         </div>
       </div>
-      <button type="button" className="flex items-center justify-between bg-black text-white cursor-pointer h-10
-        gap-4 p-3 rounded-lg hover:bg-neutral-700 ease-out duration-150">
+      <button
+        type="button"
+        className="flex items-center justify-between bg-black text-white cursor-pointer h-10
+          gap-4 p-3 rounded-lg hover:bg-neutral-700 ease-out duration-150"
+        onClick={(e) => { handleCreateProductButtonClick(e) }}
+      >
         <FaPlus />
         <p className="text-nowrap text-normal font-semibold">Novo Produto</p>
       </button>

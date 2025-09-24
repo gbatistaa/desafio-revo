@@ -1,7 +1,7 @@
 "use client";
 
-import ProductForm from "./components/CreateProductForm";
 import Header from "./components/Header";
+import ProductForm from "./components/ProductForm";
 import ProductsTable from "./components/ProductsTable";
 import Search from "./components/Search";
 

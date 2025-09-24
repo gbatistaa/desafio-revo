@@ -53,19 +53,22 @@ class ProductsController {
       handleControllerError(error, res);
     }
   };
-  public static getProductsBySearchString = async (req: Request, res: Response) => {
-    try {
-      const { searchFilter } = req.params;
 
-      const filteredProducts = await Products.findAll({
+  public static getProductsBySearchString = async (req: Request, res: Response) => {
+    const { searchFilter } = req.query;
+
+    try {
+      const filteredProductsModels = await Products.findAll({
         where: {
           name: {
-            [Op.iLike]: `%${searchFilter}%`,
+            [Op.like]: `%${searchFilter}%`,
           },
         },
       });
 
-      return res.status(200).json({ message: "Products find with success", filteredProducts });
+      const filteredProducts = filteredProductsModels.map((product) => product.dataValues);
+
+      return res.status(200).json({ message: "Products found with success", filteredProducts });
     } catch (error: unknown) {
       handleControllerError(error, res);
     }

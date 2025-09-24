@@ -2,13 +2,15 @@ import { useAtom } from "jotai";
 import React from "react";
 import { BsBoxSeam } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa6";
-import { isProductFormOnAtom } from "./ProductForm";
+import { isCreateMethodAtom, isProductFormOnAtom } from "./ProductForm";
 
 function Header(): React.JSX.Element {
+  const [, setIsCreateMethod] = useAtom(isCreateMethodAtom);
   const [, setIsProductFormOn] = useAtom(isProductFormOnAtom);
 
   const handleCreateProductButtonClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
     event.preventDefault();
+    setIsCreateMethod(true);
     setIsProductFormOn(true);
   }
 

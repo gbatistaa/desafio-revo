@@ -1,60 +1,44 @@
 import axios from "axios";
-import { atom, useAtom } from "jotai";
-import React, { useEffect } from "react";
+import React from "react";
 import { FaRegEdit, FaTrashAlt } from "react-icons/fa";
-import { ProductData } from "../interfaces/product-data.interface";
+import { useProducts } from "../hooks/useProducts";
+import Loader from "./Loader";
 
-const initialProductsData: ProductData[] = [
-  {
-    id: "1",
-    name: "Produto A",
-    description: "Descrição do Produto A",
-    price: 100.0,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    name: "Produto B",
-    description: "Descrição do Produto B",
-    price: 200.0,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
-
-export const productsDataAtom = atom<ProductData[]>(initialProductsData);
 
 function ProductsTable(): React.JSX.Element {
-  const [productsData, setProductsData] = useAtom(productsDataAtom);
+  const { productsData, loading, error, refetch } = useProducts();
 
-  useEffect(() => {
-    async function fetchData() {
-      const productsResponse = await axios.get("http://localhost:4000/products-crud");
-      setProductsData(productsResponse.data.productsData);
-      console.log(productsResponse.data.productsData)
-    }
-    fetchData();
-  }, []);
+  const handleDeleteProduct = async (event: React.MouseEvent<HTMLButtonElement>, productId: string) => {
+    event.preventDefault();
+
+    const deleteResponse = await axios.delete(`http://localhost:4000/products-crud/${productId}`);
+    console.log(deleteResponse.data.message);
+
+    refetch();
+  }
+
+  if (error) return <p>{error}</p>;
 
   return (
-    <div className="overflow-x-auto shadow shadow-gray-300 p-4 rounded-lg">
-      <table className="table-auto w-full">
+    <div className="flex flex-col gap-2 overflow-x-auto shadow shadow-gray-300 p-4 rounded-lg">
+      <h1 className="text-2xl font-bold">Lista de produtos</h1>
+      {loading && <Loader />}
+      {!loading && <table className="table-auto w-full">
         <thead>
           <tr className="h-13">
-            <th className="px-4 py-2 text-left text-gray-400 font-semibold min-w-[150px]">
+            <th className="px-4 py-2 text-left text-xl text-gray-400 font-semibold min-w-[150px]">
               Nome
             </th>
-            <th className="px-4 py-2 text-left text-gray-400 font-semibold">
+            <th className="px-4 py-2 text-left text-xl text-gray-400 font-semibold">
               Descrição
             </th>
-            <th className="px-4 py-2 text-left text-gray-400 font-semibold min-w-[120px]">
+            <th className="px-4 py-2 text-left text-xl text-gray-400 font-semibold min-w-[120px]">
               Preço
             </th>
-            <th className="px-4 py-2 text-left text-gray-400 font-semibold">
+            <th className="px-4 py-2 text-left text-xl text-gray-400 font-semibold">
               Criado em
             </th>
-            <th className="px-4 py-2 text-left text-gray-400 font-semibold">
+            <th className="px-4 py-2 text-left text-xl text-gray-400 font-semibold">
               Ações
             </th>
           </tr>
@@ -70,7 +54,7 @@ function ProductsTable(): React.JSX.Element {
                   {product.description}
                 </td>
                 <td className="px-4 py-2 font-semibold text-nowrap">
-                  R${product.price.toFixed(2)}
+                  R$ {product.price.toFixed(2)}
                 </td>
                 <td className="px-4 py-2 font-semibold text-gray-400 text-nowrap">
                   {new Date(product.createdAt).toLocaleDateString("pt-br")}
@@ -80,7 +64,11 @@ function ProductsTable(): React.JSX.Element {
                     <button type="button" className="flex justify-center items-center cursor-pointer">
                       <FaRegEdit />
                     </button>
-                    <button type="button" className="flex justify-center items-center cursor-pointer">
+                    <button
+                      type="button"
+                      className="flex justify-center items-center cursor-pointer"
+                      onClick={(e) => handleDeleteProduct(e, product.id)}
+                    >
                       <FaTrashAlt />
                     </button>
                   </div>
@@ -89,7 +77,7 @@ function ProductsTable(): React.JSX.Element {
             )
           })}
         </tbody>
-      </table>
+      </table>}
     </div>
   );
 }

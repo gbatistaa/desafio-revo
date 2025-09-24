@@ -1,12 +1,26 @@
 import axios from "axios";
+import { atom, useAtom } from "jotai";
 import React from "react";
 import { FaRegEdit, FaTrashAlt } from "react-icons/fa";
 import { useProducts } from "../hooks/useProducts";
 import Loader from "./Loader";
+import { isCreateMethodAtom, isProductFormOnAtom } from "./ProductForm";
 
+export const productIdToEditAtom = atom<string>("");
 
 function ProductsTable(): React.JSX.Element {
+  const [, setIsCreateMethod] = useAtom(isCreateMethodAtom);
+  const [, setProductIdToEdit] = useAtom(productIdToEditAtom);
+  const [, setIsCreateProductFormOn] = useAtom(isProductFormOnAtom);
   const { productsData, loading, error, refetch } = useProducts();
+
+  const handleEditButtonClick = (event: React.MouseEvent<HTMLButtonElement>, productId: string): void => {
+    event.preventDefault();
+
+    setIsCreateMethod(false);
+    setIsCreateProductFormOn(true);
+    setProductIdToEdit(productId);
+  }
 
   const handleDeleteProduct = async (event: React.MouseEvent<HTMLButtonElement>, productId: string) => {
     event.preventDefault();
@@ -61,7 +75,11 @@ function ProductsTable(): React.JSX.Element {
                 </td>
                 <td className="px-4 py-2 font-semibold text-nowrap">
                   <div className="flex h-full items-center gap-4">
-                    <button type="button" className="flex justify-center items-center cursor-pointer">
+                    <button
+                      type="button"
+                      className="flex justify-center items-center cursor-pointer"
+                      onClick={(e) => handleEditButtonClick(e, product.id)}
+                    >
                       <FaRegEdit />
                     </button>
                     <button

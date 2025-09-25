@@ -1,19 +1,33 @@
+// src/database/database.ts
+import * as dotenv from "dotenv";
+import path from "path";
 import { Sequelize } from "sequelize";
-const path = require("path");
+
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+}
+
+let storagePath: string;
+
+if (process.env.NODE_ENV === "production") {
+  storagePath = path.join("/var/data", "database.db");
+} else {
+  storagePath = path.join(__dirname, "./database.db");
+}
 
 const conn = new Sequelize({
   dialect: "sqlite",
-  storage: path.join(__dirname, "./database.db"),
+  storage: storagePath,
   logging: false,
 });
 
 conn
   .authenticate()
   .then(() => {
-    console.log("Database connection established successfully.");
+    console.log("✅ Database connection established at:", storagePath);
   })
   .catch((error) => {
-    console.error("Unable to connect to the database:", error);
+    console.error("❌ Unable to connect to the database:", error);
   });
 
 export default conn;

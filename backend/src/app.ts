@@ -1,3 +1,10 @@
+import * as dotenv from "dotenv";
+import path from "path";
+
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config({ path: path.resolve(__dirname, "../.env") });
+}
+
 import cors from "cors";
 import express from "express";
 import conn from "./database/database";
@@ -5,30 +12,40 @@ import productsCrud from "./routes/products-crud.routes";
 
 const app = express();
 
+// Middlewares
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Configuração do CORS
+const allowedOrigins = ["http://localhost:3000", "https://crud-produtos-revo.netlify.app"];
 
 app.use(
-  express.urlencoded({
-    extended: true,
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
   }),
 );
 
-app.use(cors());
-
 app.use("/products-crud", productsCrud);
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
+
 app.listen(PORT, () => {
-  console.log(`Backend running on port: ${PORT}`);
+  console.log(`✅ Backend running on port: ${PORT}`);
 });
 
 const syncDatabase = async (): Promise<void> => {
   try {
-    console.clear();
-
-    await conn.sync({ force: true }); // Only for development phase
+    const isDev = process.env.NODE_ENV !== "production";
+    await conn.sync({ force: isDev });
+    console.log("✅ Database synced");
   } catch (error) {
-    console.log(error);
+    console.error("❌ Error syncing database:", error);
   }
 };
 

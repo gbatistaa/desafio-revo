@@ -1,19 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ES2020", // JS moderno
-    "module": "nodenext", // usa ESM (import/export)
-    "moduleResolution": "NodeNext", // resolve imports estilo Node 16+
-    "outDir": "dist", // saída do build
-    "rootDir": "src", // código fonte
-    "strict": true, // checagem estrita do TS
-    "esModuleInterop": true, // compatibilidade com libs CJS
+    "target": "ES2020",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true, // ignora conflitos de tipagem de libs
-    "allowSyntheticDefaultImports": true, // permite importar libs antigas como default
-    "resolveJsonModule": true, // permite importar arquivos .json
-    "isolatedModules": true, // necessário para ferramentas tipo tsx/ts-node-dev
-    "noEmit": true // não gerar .js (já que vai rodar direto com tsx ou ts-node-dev)
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["src"], // só compila src/
-  "exclude": ["node_modules", "dist"] // ignora build e dependências
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

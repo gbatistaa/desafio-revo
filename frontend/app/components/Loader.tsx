@@ -5,13 +5,14 @@ interface LoaderProps {
   color?: string;
 };
 
-function Loader({ size = 40, color = "#000000" }: LoaderProps): React.JSX.Element {
+function Loader({ size = 70, color = "#000000" }: LoaderProps): React.JSX.Element {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={size}
       height={size}
       viewBox="0 0 50 50"
+      className="m-auto"
     >
       <circle
         cx="25"

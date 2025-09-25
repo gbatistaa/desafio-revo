@@ -6,7 +6,7 @@ import { useProducts } from "../hooks/useProducts";
 import { productIdToEditAtom } from "./ProductsTable";
 
 export const isCreateMethodAtom = atom<boolean>(true);
-export const isProductFormOnAtom = atom<boolean>(true);
+export const isProductFormOnAtom = atom<boolean>(false);
 
 function ProductForm(): React.JSX.Element {
   const [productIdToEdit] = useAtom(productIdToEditAtom);

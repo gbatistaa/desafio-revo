@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import conn from "./database/database";
 import productsCrud from "./routes/products-crud.routes";
@@ -12,11 +13,11 @@ app.use(
   }),
 );
 
-app.use(express.json());
+app.use(cors());
 
 app.use("/products-crud", productsCrud);
 
-const PORT = 3000;
+const PORT = 4000;
 app.listen(PORT, () => {
   console.log(`Backend running on port: ${PORT}`);
 });

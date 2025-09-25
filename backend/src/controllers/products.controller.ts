@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 // src/controllers/ProductsController.ts
 import { Request, Response } from "express";
+import { Op } from "sequelize";
 import { NotFoundError } from "../errors/NotFoundError";
 import { CreateProductResquestDto } from "../interfaces/dtos/creatable-product-request.dto";
 import Products from "../models/Prodcuts";
@@ -46,7 +48,27 @@ class ProductsController {
         throw new NotFoundError(`Product with id ${id} not found`);
       }
 
-      return res.status(200).json({ message: "Product found with success!", product });
+      return res.status(200).json({ message: "Product found with success!", product: product.dataValues });
+    } catch (error: unknown) {
+      handleControllerError(error, res);
+    }
+  };
+
+  public static getProductsBySearchString = async (req: Request, res: Response) => {
+    const { searchFilter } = req.query;
+
+    try {
+      const filteredProductsModels = await Products.findAll({
+        where: {
+          name: {
+            [Op.like]: `%${searchFilter}%`,
+          },
+        },
+      });
+
+      const filteredProducts = filteredProductsModels.map((product) => product.dataValues);
+
+      return res.status(200).json({ message: "Products found with success", filteredProducts });
     } catch (error: unknown) {
       handleControllerError(error, res);
     }

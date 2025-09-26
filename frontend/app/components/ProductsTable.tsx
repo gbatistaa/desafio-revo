@@ -29,7 +29,7 @@ function ProductsTable(): React.JSX.Element {
   const handleDeleteProduct = async (event: React.MouseEvent<HTMLButtonElement>, productId: string) => {
     event.preventDefault();
 
-    const deleteResponse = await axios.delete(`http://localhost:4000/products-crud/${productId}`);
+    const deleteResponse = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/${productId}`);
     console.log(deleteResponse.data.message);
 
     refetch();

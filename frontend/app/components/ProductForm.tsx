@@ -35,13 +35,12 @@ function ProductForm(): React.JSX.Element {
       price: Number(formData.get("price")),
     };
 
-
-
-    if (isCreateMethod)
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}`, product);
-    else
-      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/${productIdToEdit}`, product);
-
+    if (isCreateMethod) {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/products-crud`, product);
+    }
+    else {
+      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/products-crud/${productIdToEdit}`, product);
+    }
 
     setIsCreateProductFormOn(false);
     refetch();

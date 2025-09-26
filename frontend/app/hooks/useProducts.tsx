@@ -14,7 +14,7 @@ export function useProducts() {
   const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:4000/products-crud");
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products-crud`);
       setProductsData(response.data.productsData);
     } catch (err) {
       setError("Erro ao buscar produtos");

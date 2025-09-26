@@ -19,7 +19,7 @@ function Search(): React.JSX.Element {
 
     if (value.length > 0) {
       try {
-        const searchResponse = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/search`, { params: { searchFilter: value } });
+        const searchResponse = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products-crud/search`, { params: { searchFilter: value } });
 
         console.log(searchResponse.data.filteredProducts);
 

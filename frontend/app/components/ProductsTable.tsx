@@ -41,7 +41,7 @@ function ProductsTable(): React.JSX.Element {
     <div className="flex flex-col gap-2 overflow-x-auto shadow shadow-gray-300 p-4 rounded-lg">
       <h1 className="text-2xl font-semibold">Lista de produtos</h1>
       {
-        (searchBarValue.length === 0 ? productsData.length === 0 : filteredProducts.length === 0) &&
+        !loading && (searchBarValue.length === 0 ? productsData.length === 0 : filteredProducts.length === 0) &&
         <div className="flex flex-col items-center justify-center h-40 w-full gap-3">
           <FaRegFaceSadCry className="h-15 w-auto" fill="#99a1af" />
           <p className="text-xl font-semibold text-gray-400">Nenhum produto {productsData.length === 0 ? "cadastrado" : "filtrado"}</p>

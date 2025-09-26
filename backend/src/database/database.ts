@@ -10,9 +10,9 @@ if (process.env.NODE_ENV !== "production") {
 let storagePath: string;
 
 if (process.env.NODE_ENV === "production") {
-  storagePath = path.join("/var/data", "database.db");
+  storagePath = path.join("/data", "database.db");
 } else {
-  storagePath = path.join(__dirname, "./database.db");
+  storagePath = path.join(__dirname, "database.db");
 }
 
 const conn = new Sequelize({

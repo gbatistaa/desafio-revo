@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Configuração do CORS
-const allowedOrigins = ["http://localhost:3000", "https://crud-produtos-revo.netlify.app/"];
+const allowedOrigins = ["http://localhost:3000", "https://crud-produtos-revo.netlify.app"];
 
 app.use(
   cors({
